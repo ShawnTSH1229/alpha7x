@@ -20,7 +20,7 @@ cmake -G "Visual Studio 17 2022" ../
 ```
 # Example
 
-stochastic progressive photon mapping (my related post link):
+stochastic progressive photon mapping ([my related post link](https://shawntsh1229.github.io/2024/10/06/Stochastic-Progressive-Photon-Mapping-In-Alpha7XRenderer/)):
 
 <p align="left">
     <img src="/resource/cresult.png" width="70%" height="70%">
