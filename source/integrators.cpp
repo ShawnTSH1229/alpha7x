@@ -21,7 +21,7 @@ CSPPMIntegrator::CSPPMIntegrator(int max_depth, float initial_radius, CPerspecti
 CSPPMGrid::CSPPMGrid(int ipt_image_area, const std::vector<SCameraPixelPath>& camera_paths) :image_area(ipt_image_area)
 {
 	grids.resize(image_area);
-	memset(grids.data(), 0, sizeof(SCameraPathPoint*) * image_area);
+	memset(grids.data(), 0, sizeof(SGridVisiblePointsList*) * image_area);
 
 	float max_radius = 0.0;
 	for (int idx = 0; idx < image_area; idx++)
@@ -64,7 +64,7 @@ void CSPPMGrid::collectGridVisiblePointsList(std::vector<SCameraPixelPath>& came
 						for (int x = p_min.x; x <= p_max.x; x++)
 						{
 							uint32_t node_hash = hashVisPoint(glm::ivec3(x, y, z), image_area);
-							SCameraPathPoint* pixel_node = node_allocator.allocate(1);
+							SGridVisiblePointsList* pixel_node = node_allocator.allocate(1);
 							pixel_node->cam_pixel_path = &pixel;
 							pixel_node->next_point = grids[node_hash];
 							grids[node_hash] = pixel_node;
@@ -83,7 +83,7 @@ void CSPPMGrid::addPhoton(glm::vec3 photon_pos, glm::vec3 photon_ray_dir, glm::v
 	{
 		int photon_hash_value = hashVisPoint(photon_grid_index, image_area);
 
-		for (SCameraPathPoint* pixel_node = grids[photon_hash_value]; pixel_node != nullptr; pixel_node = pixel_node->next_point)
+		for (SGridVisiblePointsList* pixel_node = grids[photon_hash_value]; pixel_node != nullptr; pixel_node = pixel_node->next_point)
 		{
 			SCameraPixelPath* pixel = pixel_node->cam_pixel_path;
 			float radius = pixel->radius;
@@ -234,7 +234,6 @@ void CSPPMIntegrator::traceCameraPath(glm::u32vec2 image_size, int iter_idx)
 			bool find_visble_point = false;
 			float eta_scale = 1.0;
 
-			bool b_first = true;
 			while (true)
 			{
 				const CSurfaceInterraction& sf_interaction = intersect(ray);
@@ -243,12 +242,6 @@ void CSPPMIntegrator::traceCameraPath(glm::u32vec2 image_size, int iter_idx)
 				{
 					break;
 				}
-
-				if (b_first && sf_interaction.position.x > -0.0 && sf_interaction.position.x < 0.9 && sf_interaction.position.z > 0.0 && sf_interaction.position.z < 0.8 && sf_interaction.position.y > 0.3 && sf_interaction.position.y < 1.95)
-				{
-					int debug_var = 1;
-				}
-				b_first = false;
 
 				CBSDF bsdf = sf_interaction.getBSDF();
 
@@ -352,6 +345,7 @@ void CSPPMIntegrator::render()
 		sppm_grid.collectGridVisiblePointsList(camera_paths, image_size);
 		generatePhotons(photons_per_iteration, iter_idx, sppm_grid);
 		updateCameraVisiblePoints(image_size);
+		std::cout << "iteration:" << iter_idx << std::endl;
 	}
 
 	float num_photons = float(iteration_num) * photons_per_iteration;
@@ -363,7 +357,8 @@ void CSPPMIntegrator::render()
 			int pixel_idx = pixel_x + pixel_y * image_size.x;
 			SCameraPixelPath& pixel = camera_paths[pixel_idx];
 
-			glm::vec3 L = pixel.l_d / float(iteration_num) + pixel.tau / (num_photons * glm::pi<float>() * (pixel.radius * pixel.radius));
+			//glm::vec3 L = pixel.l_d / float(iteration_num) + pixel.tau / (num_photons * glm::pi<float>() * (pixel.radius * pixel.radius));
+			glm::vec3 L = pixel.l_d / float(iteration_num);
 			rgb_film->addSample(pix_pos, L);
 		}
 	}

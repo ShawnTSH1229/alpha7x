@@ -40,10 +40,10 @@ struct SCameraPixelPath
 	float n = 0.0;
 };
 
-struct SCameraPathPoint
+struct SGridVisiblePointsList
 {
 	SCameraPixelPath* cam_pixel_path;
-	SCameraPathPoint* next_point = nullptr;
+	SGridVisiblePointsList* next_point = nullptr;
 };
 
 class CSPPMGrid
@@ -57,15 +57,9 @@ private:
 	bool getGridOffest(glm::vec3 p, const glm::AABB& bounds, const int grid_res[3], glm::ivec3& out_point);
 	uint32_t hashVisPoint(glm::ivec3 photon_grid_index, int hash_size);
 
-	struct SGridVisiblePointsList
-	{
-		SCameraPixelPath* cam_pixel_path;
-		SGridVisiblePointsList* next_point = nullptr;
-	};
-
 	glm::AABB grid_bound;
-	std::allocator<SCameraPathPoint> node_allocator;
-	std::vector<SCameraPathPoint*> grids;
+	std::allocator<SGridVisiblePointsList> node_allocator;
+	std::vector<SGridVisiblePointsList*> grids;
 	int grid_res[3];
 	int image_area;
 };
