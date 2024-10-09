@@ -21,3 +21,7 @@ cmake -G "Visual Studio 17 2022" ../
 # Example
 
 stochastic progressive photon mapping (my related post link):
+
+<p align="left">
+    <img src="/resource/water-caustic/alpha7xresult.tga" width="50%" height="50%">
+</p>
