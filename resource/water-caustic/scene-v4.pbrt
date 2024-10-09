@@ -3,14 +3,14 @@ Integrator "sppm"
     "integer maxdepth" [ 9 ]
 Transform [ 1 -0 1.50996e-7 -0 -0 1 -0 -0 1.50996e-7 -0 -1 -0 -1.13687e-13 -0.990944 6.83879 1  ]
 Sampler "sobol"
-    "integer pixelsamples" [ 1 ]
+    "integer pixelsamples" [ 200 ]
 PixelFilter "triangle"
     "float xradius" [ 1 ]
     "float yradius" [ 1 ]
 Film "rgb"
     "string filename" [ "water-caustic.png" ]
     "integer yresolution" [ 256 ]
-    "integer xresolution" [ 256 ]
+    "integer xresolution" [ 256]
 Camera "perspective"
     "float fov" [ 19.5 ]
 
