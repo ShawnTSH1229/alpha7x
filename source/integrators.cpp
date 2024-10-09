@@ -357,8 +357,7 @@ void CSPPMIntegrator::render()
 			int pixel_idx = pixel_x + pixel_y * image_size.x;
 			SCameraPixelPath& pixel = camera_paths[pixel_idx];
 
-			//glm::vec3 L = pixel.l_d / float(iteration_num) + pixel.tau / (num_photons * glm::pi<float>() * (pixel.radius * pixel.radius));
-			glm::vec3 L = pixel.l_d / float(iteration_num);
+			glm::vec3 L = pixel.l_d / float(iteration_num) + pixel.tau / (num_photons * glm::pi<float>() * (pixel.radius * pixel.radius));
 			rgb_film->addSample(pix_pos, L);
 		}
 	}
