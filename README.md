@@ -4,7 +4,7 @@ Alpha 7X is a tiny offline renderer for graphics learning. It references PBRT an
 
 # Getting Started
 
-Visual Studio 2019 or 2022 is recommended, XEngine is only tested on Windows.
+Visual Studio 2019 or 2022 is recommended, only tested on Windows.
 
 1.Cloning the repository with `git clone https://github.com/ShawnTSH1229/alpha7x.git`.
 
